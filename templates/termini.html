@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Termini</title>
+  <style type="text/css" media="all">
+    @import "static/css/termini.css";
+</style>
+</head>
+<body>
+  <div id="main-container">
+    <div id="terminal-container">
+      <div class="terminal-connection-container">
+        <div class="connection-input-container">
+          <input class="connection-input" type="text" id="hostname" placeholder="Hostname" autofocus>
+          <input class="connection-input" type="text" id="username" placeholder="Username">
+          <input class="connection-input" type="password" id="password" placeholder="Password">
+          <button class="connection-button" id="connect-button">Connect</button>
+        </div>
+        <div class="hardware-container">
+          <button class="hardware" id="hardware" type="button" onclick="toggleDropdown(this)"></button>
+          <div class="hardware-dropdown" id="hardware-dropdown">
+            <iframe id="hardware-output"></iframe>
+          </div>
+        </div>
+        <div class="software-container">
+          <button class="software" id="software" type="button" onclick="toggleDropdown(this)"></button>
+          <div class="software-dropdown" id="software-dropdown">
+            <iframe id="software-output"></iframe>
+          </div>
+        </div>
+        <div class="config-container">
+          <button class="running-config-button" id="running-config" type="button" onclick="toggleDropdown(this)">Configuration</button>
+          <div class="running-config-dropdown" id="running-config-dropdown">
+            <div class="running-config-buttons-container">
+              <div class="edit-button-container">
+                <button class="edit-button" id="edit-button">Edit</button>
+              </div>
+              <div class="save-button-container">
+                <button class="save-button" id="save-button">Save</button>
+              </div>
+              <div class="cancel-button-container">
+                <button class="cancel-button" id="cancel-button">Cancel</button>
+              </div>
+            </div>
+            <div id="config-output"></div>
+          </div>
+        </div>
+      </div>
+      <div class="terminal-window" id="terminal-window" onclick="focusOnInput()">
+          <div id="output-container"></div>
+          <div id="input-container">
+            <div class="precursor" id="precursor"></div>
+            <textarea type="text" id="input"></textarea>
+          </div>
+      </div>
+    </div>
+    <div class="devices-container" id="devices-container"></div>
+    <div class="commands-container" id="commands-container"></div>
+    <div class="ports-container" id="ports-container"></div>
+  </div>
+  <script>
+    function toggleDropdown(dropdownButton) {
+        const dropdownMenu = document.getElementById(dropdownButton.id + '-dropdown');
+        
+        if (dropdownMenu.style.display === 'block') {
+            dropdownMenu.style.display = 'none';
+        } else {
+            dropdownMenu.style.display = 'block';
+        }
+    };
+  </script>
+  <script>
+    const precursorEndline = [">", "#"];
+    let commandHistory = []
+    let history = 1
+    let interfaces = []
+
+    const terminal = document.getElementById("output-container");
+    const precursor = document.getElementById('precursor');
+    const inputField = document.getElementById('input');
+    const configButton = document.getElementById('running-config');
+    const configOutput = document.getElementById('config-output');
+    const hostnameInput = document.getElementById('hostname');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const connectButton = document.getElementById('connect-button');
+    const hardware = document.getElementById('hardware');
+    const hardwareOutput = document.getElementById('hardware-output');
+    const software = document.getElementById('software');
+    const softwareOutput = document.getElementById('software-output');
+    const portsContainer = document.getElementById('ports-container');
+
+    hostnameInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        connectButton.click();
+        inputField.focus();
+      }
+    });
+
+    usernameInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        connectButton.click();
+        inputField.focus();
+      }
+    });
+
+    passwordInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        connectButton.click();
+        inputField.focus();
+      }
+    });
+
+    connectButton.addEventListener('click', async () => {
+      const hostname = hostnameInput.value;
+      const username = usernameInput.value;
+      const password = passwordInput.value;
+
+      const response = await fetch('/connect', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          hostname: hostname,
+          username: username,
+          password: password
+        })
+      });
+
+      const result = await response.json();
+      precursor.textContent = result.precursor;
+      inputField.value = " ";
+      hardware.textContent = result.hardware;
+      // hardwareOutput.setAttribute('src', result.data_sheet);
+      software.textContent = result.software;
+      softwareOutput.setAttribute('src', result.cli_reference);
+
+      configOutput.textContent = result.running_config
+      configButton.style.display = 'block';
+
+      username.style.display = 'none';
+      password.style.display = 'none';
+      connectButton.style.display = 'none';
+
+      interfaces = result.interfaces;
+      // showPorts();
+    });
+
+    function appendToTerminal(command, output) {
+      const line = document.createElement("div");
+      line.innerHTML = `<p class="terminal-output">${command}</p><p class="terminal-output">${output}</p>`;
+      terminal.append(line); 
+
+      // code below may be able to print the above output slowly and 
+      // character by character to better emulate terminal output
+      //
+      // var textToAdd = "This is some text that appears one character at a time.";
+      // var speed = 50; // Speed in milliseconds (adjust as needed)
+      //
+      // var textContainer = document.getElementById('textContainer');
+      //
+      // function addTextOneCharAtATime(index) {
+      //     if (index < textToAdd.length) {
+      //         textContainer.textContent += textToAdd.charAt(index);
+      //         index++;
+      //         setTimeout(function() {
+      //             addTextOneCharAtATime(index);
+      //         }, speed);
+      //     }
+      // }
+      //
+      // // Start the text animation
+      // addTextOneCharAtATime(0);
+    }
+
+    function focusOnInput() {
+      inputField.focus();
+    }
+
+
+
+    inputField.addEventListener("keydown", async(event) => {
+      if (event.key === "Enter") {
+        const command = inputField.value;
+        commandHistory.push(command)
+        try {
+          const response = await fetch('/send-command', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              command: command
+            })
+          });
+          const result = await response.json();
+          let precursorCommand
+          if (result) {
+            console.log(precursor.scrollWidth)
+            if (precursor.textContent) {
+              precursorCommand = precursor.textContent + command;
+            } else {
+              precursorCommand = result.precursor + command;
+            };
+            
+            const endline = new RegExp("(" + precursorEndline.join("|") + ")(.*)");
+            const endlineResult = result.precursor.split(endline);
+            console.log(endlineResult)
+            if (endlineResult.length > 2) {
+              precursor.textContent = endlineResult[0] + endlineResult[1];
+              inputField.value = endlineResult[2];
+            } else {
+              precursor.textContent = result.precursor;
+              inputField.value = " ";
+            };
+            appendToTerminal(precursorCommand, result.output || result.error);
+            terminal.scrollTop = terminal.scrollHeight;
+          }      
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
+
+      if (event.key === "ArrowUp") {
+        console.log('arrow up pressed')
+        console.log('command history length: ' + commandHistory.length)
+        console.log('history: ' + history)
+        console.log(commandHistory)
+      }
+
+      if (event.key === "ArrowUp" && commandHistory.length >= history) {
+        inputField.value = commandHistory[commandHistory.length - history] + ' '
+        history += 1
+      };
+
+      if (event.key === "ArrowDown" && history > 1) {
+        history -= 1
+        inputField.value = commandHistory[commandHistory.length - (history - 1)] + ' '
+      };
+
+      if (event.key === "ArrowDown" && history === 1) {
+        inputField.value = " ";
+      };
+    });
+  </script>
+  <script>
+    window.onload = function () {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/reset_connection', true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var response = JSON.parse(xhr.responseText);
+          if (!response['precursor'] === '$') {
+            window.alert('Termini flask application not detected. Please start termini.py and reload this page.')
+          }
+          inputField.value = " ";
+        }
+      };
+      xhr.send();
+    };
+  </script>
+  <script>
+    function showPorts() {
+
+      const switchDiv = document.createElement('div');
+      switchDiv.className = 'switch-face';
+
+      const switchFillDiv = document.createElement('div');
+      switchFillDiv.className = 'switch-label-container';
+
+      const switchName = document.createElement('a');
+      switchName.className = 'switch-name';
+      switchName.textContent = `${hardware.textContent}`;
+
+      const switchContainer = document.createElement('div');
+      switchContainer.className = 'switch-container';
+
+      const portsTopRow = document.createElement('div');
+      portsTopRow.className = 'port-row';
+
+      const portsBottomRow = document.createElement('div');
+      portsBottomRow.className = 'port-row';
+      
+      for (let i = 0; i < interfaces.length; i++) {
+        const split_i = interfaces[i].split(" ");
+        if (split_i[0] == '10') {
+          split_i[0] = split_i[0] + " " + split_i[1];
+          split_i[1] = split_i[2];
+        };
+        const split_port = split_i[1].split('/');
+        if (split_port[1] === '0') {
+          const switchIsOdd = split_port[2] % 2 !== 0;
+          // const switchIsPrimary = split_port[2] !== 0;
+
+          const portButton = document.createElement('button');
+          portButton.textContent = split_port[2];
+          portButton.id = split_i[1];
+          portButton.type = "button";
+          portButton.classList.add("port-button");
+          portButton.setAttribute('onClick', 'toggleDropdown(this)');
+          //portButton.className = switchIsPrimary ? 'port-button' : 'outline-outline-button';
+
+          // if (switchIsPrimary) {
+          //   portButton.setAttribute('onMouseOver', 'patchColorFlip(this)')
+          //   portButton.setAttribute('onMouseOut', 'patchColorBack(this)')
+          // };
+
+          const dropdownMenu = document.createElement('div');
+          dropdownMenu.id = split_i[1] + `-dropdown`
+          dropdownMenu.className = 'port-dropdown';
+
+          const portOutput = document.createElement('div');
+          portOutput.className = 'port-output';
+          portOutput.textContent = interfaces[i];
+          
+          dropdownMenu.appendChild(portOutput);
+          portButton.appendChild(dropdownMenu);
+
+          if (switchIsOdd) {
+            portsTopRow.appendChild(portButton);
+          } else {
+            portsBottomRow.appendChild(portButton);
+          }; 
+        };              
+      };
+      switchContainer.appendChild(portsTopRow);
+      switchContainer.appendChild(portsBottomRow);
+      switchFillDiv.appendChild(switchName);
+      switchFillDiv.appendChild(switchContainer);
+      switchDiv.appendChild(switchFillDiv);
+      portsContainer.appendChild(switchDiv);
+    };
+  </script>
+ 
+</body>
+</html>

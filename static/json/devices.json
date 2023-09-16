@@ -1,0 +1,10 @@
+{
+    "ruckus": {
+        "ICX7450": "https://www.commscope.com/globalassets/digizuite/61731-ds-icx-7450.pdf",
+        "08.0.95g": "fastiron-08095-commandref.pdf"
+    },
+    "cisco": {
+        "C3850": "https://www.cisco.com/c/en/us/products/collateral/switches/catalyst-3850-series-switches/datasheet_c78-720918.html",
+        "IOS XE 16.12": "static/pdf/b_1612_3850_cr.pdf"
+    }
+}

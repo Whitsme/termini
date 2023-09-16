@@ -1,0 +1,455 @@
+body {
+  background-color: #2A4C68;
+}
+
+#main-container {
+  display: block;
+}
+
+#terminal-container {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;
+}
+
+#terminal {
+  border: none;
+  padding: 0;
+  font-family: monospace;
+  background-color: black;
+  color: white;
+  margin-top: 0;
+}
+
+#output-container {
+  padding-top: 0.1rem;
+  font-family: monospace;
+  background-color: black;
+  color: white;
+  max-height: 770px;
+  overflow: hidden; 
+  overflow-y: scroll;
+}
+
+#output-container::-webkit-scrollbar {
+  width: 0;
+}
+
+#output-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+#output-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+#input-container {
+  display: flex;
+  align-items: center;
+  background-color: black;
+  padding-top: 0.2rem
+}
+
+#input {
+  border: none;
+  font-family: monospace;
+  background-color: black;
+  color: white;
+  padding-left: 0rem;
+  width: 100%;
+  height: 1rem;
+  resize: none;
+}
+
+#input:focus {
+  border: none;
+  outline: none;
+}
+
+#input::-webkit-scrollbar {
+  width: 0;
+}
+
+#input::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+#input::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+#config-output {
+  font-family: monospace;
+  max-height: 796px;
+  overflow: hidden;
+  overflow-y: scroll;
+  white-space: pre;
+  padding: 0.3rem;
+  width: 53rem;
+  display: flex;
+}
+
+.config-container {
+  margin-left: 1rem;
+}
+
+.running-config-buttons-container {
+  display: flex;
+  background-color: silver;
+  border: solid 0.32rem silver;
+  border-top: none;
+}
+
+.edit-button-container {
+  display: block;
+}
+
+.edit-button {
+  background-color: transparent;
+  color: darkslategray;
+  border: solid 0.1rem transparent;
+  border-radius: 0.2rem;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: Arial;
+}
+
+.edit-button:hover {
+  outline: none;
+  background-color: goldenrod;
+  color: #fff;
+}
+
+.save-button-container {
+  display: block;
+  margin-left: 0.3rem;
+}
+
+.save-button {
+  background-color: transparent;
+  color: darkslategray;
+  border: solid 0.1rem transparent;
+  border-radius: 0.2rem;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: Arial;
+}
+
+.save-button:hover {
+  outline: none;
+  background-color: darkseagreen;
+  color: #fff;
+}
+
+.cancel-button-container {
+  display: block;
+  margin-left: 0.3rem;
+}
+
+.cancel-button {
+  background-color: transparent;
+  color: darkslategray;
+  border: solid 0.1rem transparent;
+  border-radius: 0.2rem;
+  position: relative;
+  font-size: 14px;
+  font-family: Arial;
+}
+
+.cancel-button:hover {
+  outline: none;
+  color: #fff;
+  background-color: firebrick;
+}
+
+.running-config-button {
+  display: none;
+  background-color: transparent;
+  border: transparent;
+  border-radius: 0.3rem;
+  color: darkslategray;
+  margin-left: auto;
+  position: relative;
+  font-size: 14px;
+  font-family: Arial;
+}
+
+.running-config-button:hover {
+  outline: none;
+  color: #fff;
+  background-color: cadetblue;
+}
+
+.running-config-dropdown {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 0.3rem solid silver;
+  padding: 0;
+  margin: 0;
+  margin-left: 6.7rem;
+  margin-top: -1.45rem;
+}
+
+#config-output::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+#config-output::-webkit-scrollbar-thumb {
+  background-color: darkgray;
+}
+
+#config-output::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.terminal-window {  
+  padding-top: 0.2rem;
+  padding-left: 0.5rem;
+  background-color: black;
+  border: solid 0.32rem silver;
+  border-top: 0;
+  height: 800px;
+  width: 50%;
+  max-width: 1087px;
+}
+
+.terminal-connection-container {
+  margin-top: 3rem;
+  padding-left: 0.5rem;
+  background-color: silver;
+  border: solid 0.32rem silver;
+  width: 50%;
+  max-width: 1087px;
+  display: flex;
+}
+
+.terminal-output {
+  margin-top: 0.3rem;
+  margin-bottom: 0rem;
+  white-space: pre;
+}
+
+.precursor {
+  border: none;
+  font-family: monospace;
+  background-color: black;
+  color: white;
+  padding-left: 0rem;
+  margin-right: 0;
+  height: 1rem;
+  resize: none;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.connection-input {
+  background-color: darkgray;
+  color: darkslategray;
+  border: solid 0.1rem transparent;
+  border-radius: 0.2rem;
+}
+
+.connection-input::placeholder {
+  color: darkslategray;
+}
+
+.connection-input:focus {
+  border: none;
+  outline: none;
+  background-color: #fff;
+}
+
+.connection-button {
+  background-color: transparent;
+  border: solid 0.1rem transparent;
+  border-radius: 0.3rem;
+  color: darkslategray;
+}
+
+.connection-button:focus {
+  outline: none;
+  color: #fff;
+  background-color: darkseagreen;
+}
+
+#pdf-container {
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;
+}
+
+#pdf-viewer {
+  margin-top: 3rem;
+  padding-left: 0.5rem;
+  background-color: #fff;
+  border: solid 0.32rem silver;
+  width: 50%;
+  max-width: 1087px;
+  display: block;
+}
+
+#hardware-output {
+  font-family: monospace;
+  max-height: 820px;
+  overflow: hidden;
+  overflow-y: scroll;
+  white-space: pre;
+  padding: 0.3rem;
+}
+
+.hardware {
+  background-color: silver;
+  color: darkslategray;
+  border: solid 0.1rem transparent;
+  border-radius: 0.2rem;
+  margin-left: 1rem;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: Arial;
+}
+
+.hardware:hover {
+  outline: none;
+  color: #fff;
+  background-color: lightseagreen;
+}
+
+.hardware-dropdown {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 0.3rem solid silver;
+  padding: 0;
+  margin: 0;
+  margin-left: 6.6rem;
+  margin-top: -1.4rem;
+}
+
+#hardware-output::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+#hardware-output::-webkit-scrollbar-thumb {
+  background-color: darkgray;
+}
+
+#hardware-output::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+#software-output {
+  font-family: monospace;
+  max-height: 820px;
+  overflow: hidden;
+  overflow-y: scroll;
+  white-space: pre;
+  padding: 0.3rem;
+  width: 53rem;
+  height: 812px;
+  max-height: 812px;
+}
+
+.software-container {
+  margin-left: auto;
+}
+
+.software {
+  background-color: silver;
+  color: darkslategray;
+  border: solid 0.1rem transparent;
+  border-radius: 0.2rem;
+  margin-left: auto;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: Arial;
+}
+
+.software:hover {
+  outline: none;
+  color: #fff;
+  background-color: lightcoral;
+}
+
+.software-dropdown {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 0.3rem solid silver;
+  padding: 0;
+  margin: 0;
+  margin-left: -104.7rem;
+  margin-top: -1.55rem;
+}
+
+#software-output::-webkit-scrollbar {
+  width: 0.4rem;
+}
+
+#software-output::-webkit-scrollbar-thumb {
+  background-color: darkgray;
+}
+
+#software-output::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.ports-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.switch-face {
+  margin-top: 3rem;
+  padding-left: 0.5rem;
+  background-color: silver;
+  border: solid 0.32rem silver;
+  width: 50%;
+  max-width: 1087px;
+  display: flex;
+}
+
+.port-button {
+  font-size: 16px;
+  color: #fff;
+  background-color: lightseagreen;
+  border-color: lightseagreen;
+  padding: 2px 4px;
+  border: none;
+  border-radius: 4px;
+  pointer-events: auto;
+  width: 2.2rem;
+  margin: 1px;
+}
+
+.port-button:hover {
+  color: #fff;
+  background-color:goldenrod;
+  border-color: goldenrod;
+}
+
+.port-button:focus {
+  box-shadow: lightseagreen;
+}
+
+.port-row {
+  text-align: center;
+}
+
+.port-dropdown {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 0.3rem solid silver;
+  padding: 0;
+  margin: 0;
+}
+
+.port-output {
+  font-family: monospace;
+  padding: 0.3rem;
+}
