@@ -6,6 +6,42 @@ body {
   display: block;
 }
 
+.terminal-button {
+  display: none;
+  position: relative;
+  background-color: transparent;
+  border: solid 0.1rem transparent;
+  border-radius: 0.3rem;
+  color: darkslategray;
+  margin-left: 0.3rem;
+}
+
+.terminal-button:hover {
+  outline: none;
+  color: #fff;
+  background-color: darkseagreen;
+}
+
+.terminal-button-dropdown {
+  display: none;
+  padding-top: 0.2rem;
+  padding-left: 0.5rem;
+  background-color: black;
+  border: solid 0.32rem silver;
+  border-top: 0;
+  height: 800px;
+  min-width: 1087px;
+}
+
+.terminal-button-dropdown.show-dropdown {
+  display: block;
+  animation: slide-down 0.3s ease-in-out;
+}
+
+.terminal-button-dropdown.hide {
+  animation-name: slide-up;
+}
+
 #terminal-container {
   display: flex;
   flex-direction: column; 
@@ -86,12 +122,9 @@ body {
   overflow-y: scroll;
   white-space: pre;
   padding: 0.3rem;
-  width: 53rem;
+  width: 1087px;
+  height: 767px;
   display: flex;
-}
-
-.config-container {
-  margin-left: 1rem;
 }
 
 .running-config-buttons-container {
@@ -163,14 +196,48 @@ body {
   background-color: firebrick;
 }
 
+.vlan-button {
+  display: none;
+  background-color: silver;
+  color: darkslategray;
+  border: solid 0.1rem transparent;
+  border-radius: 0.2rem;
+  margin-left: auto;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: Arial;
+}
+
+.vlan-button:hover {
+  outline: none;
+  color: #fff;
+  background-color: cadetblue;
+}
+
+.vlan-button-dropdown {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 0.3rem solid silver;
+  padding: 0;
+  margin: 0;
+  margin-left: 1rem;
+  margin-top: 0.1rem;
+}
+
+.vlan-output {
+  padding: 0.3rem;
+  padding-right: 1rem;
+}
+
 .running-config-button {
   display: none;
-  background-color: transparent;
-  border: transparent;
-  border-radius: 0.3rem;
+  background-color: silver;
   color: darkslategray;
+  border: solid 0.1rem transparent;
+  border-radius: 0.2rem;
   margin-left: auto;
-  position: relative;
+  text-decoration: none;
   font-size: 14px;
   font-family: Arial;
 }
@@ -188,8 +255,8 @@ body {
   border: 0.3rem solid silver;
   padding: 0;
   margin: 0;
-  margin-left: 6.7rem;
-  margin-top: -1.45rem;
+  margin-left: -62.6rem;
+  margin-top: 0.3rem;
 }
 
 #config-output::-webkit-scrollbar {
@@ -220,8 +287,11 @@ body {
   padding-left: 0.5rem;
   background-color: silver;
   border: solid 0.32rem silver;
-  width: 50%;
-  max-width: 1087px;
+  min-width: 1087px;
+  display: flex;
+}
+
+.connection-input-container {
   display: flex;
 }
 
@@ -249,6 +319,7 @@ body {
   color: darkslategray;
   border: solid 0.1rem transparent;
   border-radius: 0.2rem;
+  margin-left: 0.3rem
 }
 
 .connection-input::placeholder {
@@ -261,14 +332,136 @@ body {
   background-color: #fff;
 }
 
-.connection-button {
+.hostname-menu-container {
+  margin-left: -0.3rem;
+}
+
+.hostname-button {
   background-color: transparent;
   border: solid 0.1rem transparent;
   border-radius: 0.3rem;
   color: darkslategray;
 }
 
-.connection-button:focus {
+.hostname-button:hover {
+  outline: none;
+  color: #fff;
+  background-color: darkseagreen;
+}
+
+.hostname-dropdown-container {
+  display: flex;
+  position: absolute;
+}
+
+.hostname-button-dropdown {
+  display: none;
+  background-color: #fff;
+  border: 0.3rem solid silver;
+  padding: 0;
+  margin: 0;
+  margin-left: -0.3rem;
+}
+
+.location-group-container{
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+  position: relative;
+}
+
+.location-group-dropdown {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 0.3rem solid silver;
+  padding: 0;
+  margin: 0;
+  top: -0.3rem;
+  left: 104%;
+  z-index: 1;
+}
+
+.location-group {
+  background-color: transparent;
+  border: solid 0.1rem transparent;
+  color: darkslategray;
+  margin: 0.1rem;
+  width: 100%;
+  text-align: left;
+}
+  
+.location-group:hover {
+  outline: none;
+  color: #fff;
+  background-color: darkseagreen;
+}
+
+.locations-container {
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+  position: relative;
+}
+
+.location {
+  background-color: transparent;
+  border: solid 0.1rem transparent;
+  color: darkslategray;
+  margin: 0.1rem;
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+}
+  
+.location:hover {
+  outline: none;
+  color: #fff;
+  background-color: darkseagreen;
+}
+
+.location-dropdown {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 0.3rem solid silver;
+  padding: 0;
+  margin: 0;
+  top: -0.3rem;
+  left: 103%;
+  z-index: 1;
+}
+
+.host-container {
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+  position: relative;
+}
+
+.host {
+  background-color: transparent;
+  border: solid 0.1rem transparent;
+  color: darkslategray;
+  margin: 0.1rem;
+  width: 100%;
+  text-align: left;
+  white-space: nowrap;
+}
+  
+.host:hover {
+  outline: none;
+  color: #fff;
+  background-color: darkseagreen;
+}
+
+
+.connection-button {
+  background-color: transparent;
+  border: solid 0.1rem transparent;
+  border-radius: 0.3rem;
+  color: darkslategray;
+  margin-left: 0.3rem;
+}
+
+.connection-button:hover {
   outline: none;
   color: #fff;
   background-color: darkseagreen;
@@ -298,9 +491,13 @@ body {
   overflow-y: scroll;
   white-space: pre;
   padding: 0.3rem;
+  width: 1084px;
+  height: 787px;
+  max-height: 787px;
 }
 
 .hardware {
+  display: none;
   background-color: silver;
   color: darkslategray;
   border: solid 0.1rem transparent;
@@ -324,8 +521,7 @@ body {
   border: 0.3rem solid silver;
   padding: 0;
   margin: 0;
-  margin-left: 6.6rem;
-  margin-top: -1.4rem;
+  margin-left: -46.68rem;
 }
 
 #hardware-output::-webkit-scrollbar {
@@ -347,16 +543,18 @@ body {
   overflow-y: scroll;
   white-space: pre;
   padding: 0.3rem;
-  width: 53rem;
-  height: 812px;
-  max-height: 812px;
+  width: 1083px;
+  height: 787px;
+  max-height: 787px;
 }
 
-.software-container {
+.device-connected-container {
   margin-left: auto;
+  display: flex;
 }
 
 .software {
+  display: none;
   background-color: silver;
   color: darkslategray;
   border: solid 0.1rem transparent;
@@ -380,8 +578,7 @@ body {
   border: 0.3rem solid silver;
   padding: 0;
   margin: 0;
-  margin-left: -104.7rem;
-  margin-top: -1.55rem;
+  margin-left: -56.35rem;
 }
 
 #software-output::-webkit-scrollbar {
@@ -403,14 +600,110 @@ body {
   align-items: center;
 }
 
-.switch-face {
-  margin-top: 3rem;
-  padding-left: 0.5rem;
-  background-color: silver;
-  border: solid 0.32rem silver;
-  width: 50%;
-  max-width: 1087px;
+
+.face-button {
+  display: none;
+  position: relative;
+  background-color: transparent;
+  border: solid 0.1rem transparent;
+  border-radius: 0.3rem;
+  color: darkslategray;
+  margin-left: 0.3rem;
+}
+
+.face-button:hover {
+  outline: none;
+  color: #fff;
+  background-color: darkseagreen;
+}
+
+.face-button-dropdown {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.face-button-dropdown.show-dropdown {
   display: flex;
+  animation: slide-down 0.3s ease-in-out;
+}
+
+.face-button-dropdown.hide {
+  animation-name: slide-up;
+}
+
+.rear-button {
+  display: none;
+  position: relative;
+  background-color: transparent;
+  border: solid 0.1rem transparent;
+  border-radius: 0.3rem;
+  color: darkslategray;
+  margin-left: 0.3rem;
+}
+
+.rear-button:hover {
+  outline: none;
+  color: #fff;
+  background-color: darkseagreen;
+}
+
+.rear-button-dropdown {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.rear-button-dropdown.show-dropdown {
+  display: flex;
+  animation: slide-down 0.3s ease-in-out;
+}
+
+.rear-button-dropdown.hide {
+  animation-name: slide-up;
+}
+
+.switch-face {
+  margin-top: 0rem;
+  padding-left: 0.5rem;
+  background-size: cover;
+  background-position: center;
+  background-color: #00000073;
+  border: solid 0.32rem silver;
+  min-width: 1087px;
+  height: 6.4rem;
+  display: flex;
+}
+
+.switch-rear {
+  margin-top: 0rem;
+  padding-left: 0.5rem;
+  background-size: cover;
+  background-position: center;
+  background-color: #00000073;
+  border: solid 0.32rem silver;
+  min-width: 1087px;
+  height: 6.4rem;
+  display: flex;
+}
+
+.switch-container-one {
+  margin-left: auto;
+}
+
+.switch-container-two {
+  text-align: center;
+  margin: 0.6rem;
+}
+
+.switch-container-three {
+  text-align: center;
+}
+
+.switch-container-four {
+  text-align: center;
 }
 
 .port-button {
@@ -440,6 +733,18 @@ body {
   text-align: center;
 }
 
+.port-top-row {
+  text-align: center;
+  background-color: silver;
+  margin-top: 0.2rem;
+}
+
+.port-bottom-row {
+  text-align: center;
+  background-color: silver;
+  margin-bottom: 0.2rem;
+}
+
 .port-dropdown {
   display: none;
   position: absolute;
@@ -450,6 +755,424 @@ body {
 }
 
 .port-output {
+  display: none;
   font-family: monospace;
   padding: 0.3rem;
+  color: darkslategray;
+  text-align: left;
+  white-space: pre;
+  /* display: flex; */
+}
+
+.network-port-button {
+  width: 3.25rem;
+  height: 3rem;
+  /* border: 0.01rem solid silver;
+  border-radius: 0.3rem; */
+  border: none;
+  background-color: transparent; 
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+.port-lights-container {
+  width: 3rem;
+  height: 0.7rem;
+  background-color: #000; 
+  display: flex;
+}
+
+.left-port-light-container {
+  width: 0.8rem;
+  height: 0.55rem;
+  border: 0.1rem solid #fff;
+  background-color: #fff; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-port-light {
+  width: 0.6rem;
+  height: 0.45rem;
+  border: 0.1rem solid #b8860b42;
+  border-radius: 0.05rem;
+  background-color: #b8860b42;
+}
+
+.left-port-light.up  {
+  border-color: darkgoldenrod;
+  background-color: darkgoldenrod;
+}
+
+.right-port-light-container {
+  width: 0.8rem;
+  height: 0.55rem;
+  border: 0.1rem solid #fff;
+  background-color: #fff; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+}
+
+.right-port-light {
+  width: 0.6rem;
+  height: 0.45rem;
+  border: 0.1rem solid #2e8b5745;
+  border-radius: 0.05rem;
+  background-color: #2e8b5745;
+}
+
+.right-port-light.up  {
+  border-color: seagreen;
+  background-color: seagreen;
+}
+
+.top-port-nub-container {
+  width: 1.2rem;
+  height: 0.55rem;
+  background-color: #000; 
+  display: flex;
+}
+
+.bottom-port-nub-container {
+  width: 1.2rem;
+  height: 0.25rem;
+  background-color: #000;
+  display: flex;
+  margin-top: 0.4rem;
+}
+
+.left-port-light-nub {
+  width: 0.25rem;
+  height: 0.25rem;
+  background-color: #fff; 
+}
+
+.right-port-light-nub {
+  width: 0.25rem;
+  height: 0.25rem;
+  background-color: #fff; 
+  margin-left: auto;
+}
+
+.port-container {
+  width: 2.4rem;
+  height: 1.4rem;
+  background-color: #000; 
+  margin-left: 0.3rem;
+}
+
+.top-port-number {
+  font-size: 11px;
+  font-family: Arial;
+  margin-top: -0.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.bottom-port-number {
+  font-size: 11px;
+  font-family: Arial;
+  margin-bottom: 0.25rem;
+}
+
+.port-contacts-container {
+  width: 2.4rem;
+  height: 0.8rem;
+  background-color: #000; 
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.port-contact {
+  width: 0.05rem;
+  height: 0.5rem;
+  background-color: #fff; 
+  margin: 0.1rem;
+}
+
+.sfp-port-button {
+  width: 3.2rem;
+  height: 1.8rem;
+  border: 0.01rem solid silver;
+  background-color: silver;
+  color: #fff;
+  padding: 0;
+  margin-top: 3rem;
+}
+
+.sfp-port-container {
+  width: 3rem;
+  height: 1.6rem;
+  background-color: #000;
+}
+
+.sfp-port-number {
+  font-size: 11px;
+  font-family: Arial;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+}
+
+.sfp-port-contacts-container {
+  width: 2.4rem;
+  height: 0.1rem;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  margin-left: 10%;
+  padding-bottom: 0.2rem;
+}
+
+.sfp-port-contact {
+  width: 0.05rem;
+  height: 0.1rem;
+  background-color: #fff;
+  margin: 0.1rem;
+}
+
+.qsfp-port-button {
+  width: 5.2rem;
+  height: 3rem;
+  border: 0.01rem solid silver;
+  background-color: silver;
+  color: #fff;
+  margin: 0.6rem;
+  padding: 0;
+  margin-top: 2.4rem;
+}
+
+.qsfp-port-container {
+  width: 4.7rem;
+  height: 2.4rem;
+  background-color: #000;
+  margin-left: 0.2rem;
+}
+
+.qsfp-port-number {
+  font-size: 11px;
+  font-family: Arial;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+}
+
+.qsfp-port-contacts-container {
+  width: 2.4rem;
+  height: 0.4rem;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  margin-left: 25%;
+  padding-bottom: 0.2rem;
+}
+
+.qsfp-port-contact {
+  width: 0.05rem;
+  height: 0.4rem;
+  background-color: #fff;
+  margin: 0.1rem;
+}
+
+.devices-container {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 0.3rem solid silver;
+  padding: 0;
+  margin: 0;
+  margin-left: 20rem;
+  margin-top: -52.5rem;
+}
+
+.show-command-button {
+  display: none;
+  position: relative;
+  background-color: transparent;
+  border: solid 0.1rem transparent;
+  border-radius: 0.3rem;
+  color: darkslategray;
+  margin-left: 0.3rem;
+}
+
+.show-command-button:hover {
+  outline: none;
+  color: #fff;
+  background-color: darkseagreen;
+}
+
+.show-command-dropdown {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 0.3rem solid silver;
+  margin-left: 1rem;
+}
+
+.command-button {
+  background-color: transparent;
+  border: solid 0.1rem transparent;
+  color: darkslategray;
+  margin: 0.1rem;
+  width: 100%;
+  text-align: left;
+}
+  
+.command-button:hover {
+  outline: none;
+  color: #fff;
+  background-color: darkseagreen;
+}
+
+.show-dropdown {
+  display: block;
+}
+
+.port-details-dropdown {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.port-details-dropdown.show-dropdown {
+  display: flex;
+  animation: slide-down 0.3s ease-in-out;
+}
+
+.port-details-dropdown.hide {
+  animation-name: slide-up;
+}
+
+.port-details-menu {
+  display: flex;
+  background-color: silver;
+  border: solid 0.32rem silver;
+  border-top: none;
+  min-width: 1095px;
+}
+
+.port-details-output {
+  display: none;
+  font-family: monospace;
+  max-height: 796px;
+  overflow: hidden;
+  overflow-y: scroll;
+  white-space: pre;
+  padding: 1rem;
+  min-width: 1063px;
+  /* height: 767px; */
+  background-color: #fff;
+  border: 0.32rem solid silver;
+}
+
+.port-details-output.show-dropdown {
+  display: flex;
+}
+
+.tagged-vlan-1 {
+  background-color: firebrick;
+}
+
+.tagged-vlan-34 {
+  background-color: cadetblue;
+}
+
+.tagged-vlan-35 {
+  background-color: coral;
+}
+
+.tagged-vlan-99 {
+  background-color: firebrick;
+}
+
+.tagged-vlan-112 {
+  background-color: indigo;
+}
+
+.tagged-vlan-350 {
+  background-color: lightseagreen;
+}
+
+.tagged-vlan-501 {
+  background-color: firebrick;
+}
+
+.tagged-vlan-502 {
+  background-color: gold;
+}
+
+.tagged-vlan-505 {
+  background-color: orangered;
+}
+
+.tagged-vlan-508 {
+  background-color: darkslategrey;
+}
+
+.tagged-vlan-530 {
+  background-color: lawngreen;
+}
+
+.tagged-vlan-515 {
+  background-color: deeppink;
+}
+
+.untagged-vlan-1 {
+  color: firebrick;
+}
+
+.untagged-vlan-99 {
+  color: firebrick;
+}
+
+.untagged-vlan-501 {
+  color: firebrick;
+}
+
+.untagged-vlan-502 {
+  color: gold;
+}
+
+.untagged-vlan-505 {
+  color: orangered;
+}
+
+.untagged-vlan-508 {
+  color: darkslategrey;
+}
+
+.untagged-vlan-530 {
+  color: lawngreen;
+}
+
+.untagged-vlan-515 {
+  color: deeppink;
+}
+
+@keyframes slide-down {
+  from {
+      transform: translateY(-10px);
+      opacity: 0;
+  }
+  to {
+      transform: translateY(0);
+      opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+      transform: translateY(0);
+      opacity: 1;
+  }
+  to {
+      transform: translateY(-10px);
+      opacity: 0;
+      display: none;
+  }
 }
