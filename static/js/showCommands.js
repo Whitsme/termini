@@ -10,20 +10,20 @@ async function showInterfaces() {
         console.log(interfaces);
         addInterfaces(interfaces);
         showPorts();
-        const newSwitchFace = document.getElementById('switch-face');
-        const newSwitchRear = document.getElementById('switch-rear');
+        const newSwitchFace = document.getElementsByClassName('switch-face');
+        const newSwitchRear = document.getElementsByClassName('switch-rear');
         const faceButton = document.getElementById('face-button');
         const rearButton = document.getElementById('rear-button');
 
-        if (newSwitchFace) {
+        if (newSwitchFace.length > 0) {
           faceButton.style.display = 'block';
         };
 
-        if (newSwitchRear) {
+        if (newSwitchRear.length > 0) {
           rearButton.style.display = 'block';
         };
       };
-      matchSwitchWidth();
+
     } catch (error) {
       console.error('Error:', error);
     };
@@ -76,7 +76,6 @@ async function showRunningConfig() {
       console.error('Error:', error);
     };
     showPorts();
-    matchSwitchWidth();
 };
 
 async function showLldpNeighbors() {
@@ -115,7 +114,7 @@ async function showLldpNeighbors() {
         };
       };
       showPorts();
-      matchSwitchWidth();
+
     } catch (error) {
       console.error('Error:', error);
     };

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import re
+
 from modules.ssh import send_ssh_no_pagination
 
 running_config_and_interfaces = {
@@ -20,9 +22,34 @@ def save_vlan(vlan_type, port_number, last_vlan) -> None:
         else:
             running_config_and_interfaces[vlan_type][port_number] = [last_vlan]
 
-def aruba_pre_process_vlan(vlan_type, last_vlan, split_line):
-    port_start = split_line[2].split('-')[0]
-    port_end = split_line[2].split('-')[1]
+def get_sub_port(port_start, port_end=None):
+    sub_port = 0
+    if 'A' in port_start:
+        sub_port = 1
+        port_start = port_start.strip('A')
+        if port_end:
+            port_end = port_end.strip('A')
+    elif 'B' in port_start:
+        sub_port = 2
+        port_start = port_start.strip('B')
+        if port_end:
+            port_end = port_end.strip('B')
+    elif 'C' in port_start:
+        sub_port = 3
+        port_start = port_start.strip('C')
+        if port_end:
+            port_end = port_end.strip('C')
+    
+
+def aruba_pre_process_vlan(vlan_type, last_vlan, port_range):
+    split_range = str(port_range).split('-')
+    if len(split_range) > 1: 
+        port_start = split_range[0]
+        port_end = split_range[1]
+    else:
+        port_start = str(port_range)
+        port_end = None
+    sub_port = 0
     if 'A' in port_start:
         sub_port = 1
         port_start = port_start.strip('A')
@@ -32,91 +59,78 @@ def aruba_pre_process_vlan(vlan_type, last_vlan, split_line):
     elif 'C' in port_start:
         sub_port = 3
         port_start = port_start.strip('C')
-    for port in range(int(port_start), int(port_end) + 1):
-        if port_start is list:
-            port_number = f'{port_start[0]}/{port_start[1]}/{port}' 
-        else:
+    if port_end != None: 
+        port_end = port_end.strip('A').strip('B').strip('C')
+        for port in range(int(port_start), int(port_end) + 1):
             port_number = f'1/{sub_port}/{port}' 
+            save_vlan(vlan_type, port_number, last_vlan)
+    else:
+        port = port_range
+        port_number = f'1/{sub_port}/{port}' 
         save_vlan(vlan_type, port_number, last_vlan)
 
 def parse_untagged_vlan(split_line, last_vlan) -> None:
     vlan_type = 'untagged_vlan'
-    if '-' in split_line:
-        sub_port = 0
-        if ',' in split_line:
-            split_ranges = split_line[2].split(',')
+    if '-' in split_line[1]:
+        if ',' in split_line[1]:
+            split_ranges = split_line[1].split(',')
             for port_range in split_ranges:
                 aruba_pre_process_vlan(vlan_type, last_vlan, port_range)
         else:
-            aruba_pre_process_vlan(vlan_type, last_vlan, split_line)
-    else: 
-        i = 0
-        for word in split_line:
-            if 'ethe' == word:
-                port_number = split_line[i + 1]
-                save_vlan(vlan_type, port_number, last_vlan)
-            i +=1
+            port_range = split_line[1]
+            aruba_pre_process_vlan(vlan_type, last_vlan, port_range)
+    else:
+        if len(split_line) == 2:
+            split_line[1] = int(split_line[1])
+            port_range = split_line[1]
+            aruba_pre_process_vlan(vlan_type, last_vlan, port_range)
 
 def parse_tagged_vlan(split_line, last_vlan) -> None:
     vlan_type = 'tagged_vlan'
-    try:
-        split_line[1] = int(split_line[1])
-        port_number = split_line[1]
-        save_vlan(vlan_type, port_number, last_vlan)
-    except:
-        if '-' in split_line:
-            sub_port = 0
-            if ',' in split_line:
-                split_ranges = split_line[2].split(',')
-                for port_range in split_ranges:
-                    aruba_pre_process_vlan(vlan_type, port_number, last_vlan, port_range)
-            else:
-                aruba_pre_process_vlan(vlan_type, port_number, last_vlan, split_line)
-
-        if '/' in split_line[2]:
-            port_start = split_line[2].split('/')
-            port_end = split_line[4].split('/')
-        
-        for port in range(int(port_start[-1]), int(port_end[-1]) + 1):
-            port_number = f'{port_start[0]}/{port_start[1]}/{port}' 
+    if '-' in split_line[1]:
+        if ',' in split_line[1]:
+            split_ranges = split_line[1].split(',')
+            for port_range in split_ranges:
+                aruba_pre_process_vlan(vlan_type, last_vlan, port_range)
+        else:
+            port_range = split_line[1]
+            aruba_pre_process_vlan(vlan_type, last_vlan, port_range)
+    else:
+        if len(split_line) == 2:
+            split_line[1] = int(split_line[1])
+            port_number = split_line[1]
             save_vlan(vlan_type, port_number, last_vlan)
 
 def parse_lines(output, precursor) -> None:
     last_interface = ''
     last_vlan = ''
     for line in output:
-        if '--More--' not in line:
-            clean_line = line.replace('"', '\\"').replace('\r', '')
-            if precursor in clean_line:
-                return False
-            if 'interface' in clean_line:
-                split_interface = clean_line.split(' ')[1].split('/')
-                if len(split_interface) == 3:
-                    interface = f"{split_interface[0][-1]}/{split_interface[1]}/{split_interface[2]}"
-                    last_interface = interface
-            if 'vlan' in clean_line:
-                if 'switchport' in clean_line:
-                    last_vlan = clean_line.split(' ')[-1]
-                else: 
-                    last_vlan = clean_line.split(' ')[1]
-                if 'native' in clean_line:
-                    save_vlan('untagged_vlan', last_interface, last_vlan)
-                elif  'access' in clean_line or 'allowed' in clean_line:
-                    save_vlan('tagged_vlan', last_interface, last_vlan)
-                
-            if 'untagged' in clean_line or 'tagged' in clean_line:
-                split_line = clean_line.strip().split(' ')
-                if 'untagged' in clean_line:
+        if '-- MORE --' not in line:
+            print(line)
+            split_line = line.strip().split(' ')
+            if precursor in line:
+                return
+            if 'vlan' in line:
+                last_vlan = split_line[1] 
+            if len(split_line) == 2:
+                if 'untagged' in line:
                     parse_untagged_vlan(split_line, last_vlan)
-                elif 'tagged' in clean_line:
+                elif 'tagged' in line:
                     parse_tagged_vlan(split_line, last_vlan)                     
                                   
-            all_lines.append(clean_line)
+            all_lines.append(line)
 
 def aruba_show_running_config(ssh_channel, precursor, no_pagination_cmd) -> dict:
     output = send_ssh_no_pagination(ssh_channel, 'show running-config\n', precursor, no_pagination_cmd)
+    # output = send_ssh_no_pagination(ssh_channel, 'show config int\n', precursor, no_pagination_cmd)
+
+    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    output = ansi_escape.sub('', output)
+
     output_lines = [line for line in output.split('\n') if line.strip()]
     parse_lines(output_lines, precursor)
 
     running_config_and_interfaces['running_config'] = '\n'.join(all_lines)
+    print('returning running config')
+    print(running_config_and_interfaces['untagged_vlan'])
     return running_config_and_interfaces

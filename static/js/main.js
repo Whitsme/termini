@@ -1,5 +1,6 @@
 
 const precursorEndline = [">", "#"];
+const maxLineLength = 200;
 let commandHistory = []
 let history = 1
 let interface_info = {}
@@ -17,6 +18,8 @@ const hardware = document.getElementById('hardware');
 const hardwareOutput = document.getElementById('hardware-output');
 const software = document.getElementById('software');
 const softwareOutput = document.getElementById('software-output');
+const faceButton =  document.getElementById('face-button');
+const rearButton = document.getElementById('rear-button');
 const portDetailsDropdown = document.getElementById('port-details-dropdown');
 const portDetailCurrentPort = document.getElementById('port-details-current-port');
 const portDetailsOutput = document.getElementById('port-details-button-dropdown');
@@ -52,31 +55,6 @@ function addInterfaces(interfaces) {
     };
 };
 
-// sets the width of several elements to match the width of the current switch width
-function matchSwitchWidth() {
-  const switchFaceDropdown = document.getElementById('face-button-dropdown');
-  const switchRearDropdown = document.getElementById('rear-button-dropdown');
-  const setPortMenuWidth = document.getElementById('port-details-menu');
-  const setPortDetailsWidth = document.getElementById('port-details-output');
-  const setTerminalMenuWidth = document.getElementById('terminal-connection-container');
-  const setTerminalWidth = document.getElementById('terminal-button-dropdown');
-
-  if (switchFaceDropdown) {
-    const widthToMatch = switchFaceDropdown.offsetWidth;
-    switchRearDropdown.style.width = widthToMatch + 'px';
-  } else if (switchRearDropdown) {
-    const widthToMatch = switchRearDropdown.offsetWidth;
-    switchFaceDropdown.style.width = widthToMatch + 'px';
-  } else {
-    return
-  };
-
-  setPortMenuWidth.style.width = widthToMatch + 'px';
-  setPortDetailsWidth.style.width = widthToMatch + 'px';
-  setTerminalMenuWidth.style.width = widthToMatch + 'px';
-  setTerminalWidth.style.width = widthToMatch + 'px';
-};
-
 function toggleDropdown(dropdownButton) {
     const dropdownMenu = document.getElementById(dropdownButton.id + '-dropdown');
 
@@ -96,12 +74,28 @@ function hideOtherDropdowns(button, dropdownClassName) {
 
   for (const i in classNameDropdowns) {
     const foundDropdown = classNameDropdowns[i]
-    console.log(foundDropdown)
-    console.log(foundDropdown.id)
     if (foundDropdown.id && foundDropdown.id !== button.id + '-dropdown') {
       foundDropdown.classList.remove('show-dropdown');
     };
   };
+};
+
+function maxOutputLength(outputOverMax) {
+  let newOutput = '';
+  let lineLength = 0;
+
+  for (let i = 0; i < outputOverMax.length; i++) {
+    if (lineLength >= maxLineLength && outputOverMax[i] !== ' ') {
+      newOutput += '\n'; 
+      lineLength = 0;
+    };
+    newOutput += outputOverMax[i];
+    lineLength++;
+    if (outputOverMax[i] === '\n') {
+      lineLength = 0;
+    };
+  };
+  return newOutput;
 };
 
 function showPortDetails(button) {
@@ -119,22 +113,32 @@ function showPortDetails(button) {
 
   } else {
     if (portDetailsText) {
-      portDetailsOutput.innerHTML = portDetailsText;
+      let portInfoOutput = portDetailsText
+      if (portInfoOutput.length > maxLineLength) {
+        portInfoOutput = maxOutputLength(portInfoOutput);
+      };
+      portDetailsOutput.innerHTML = portInfoOutput;
+      portVlanOutput.innerHTML = '';
+      portLldpOutput.innerHTML = ''; 
       if ('tagged_vlan' in interface_info[button.id] || 'untagged_vlan' in interface_info[button.id]) {
-        if ('tagged_vlan' in interface_info[button.id] && 'untagged_vlan' in interface_info[button.id]) {
-          portVlanOutput.innerHTML = 'Untagged Vlans: ' + interface_info[button.id]['untagged_vlan'] + '\n\nTagged Vlans: ' + interface_info[button.id]['tagged_vlan'];
-        } else if ('tagged_vlan' in interface_info[button.id]) {
-          portVlanOutput.innerHTML = 'Tagged Vlans: ' + interface_info[button.id]['tagged_vlan'];
-        } else if ('untagged_vlan' in interface_info[button.id]) {
-          portVlanOutput.innerHTML = 'untagged Vlans: ' + interface_info[button.id]['untagged_vlan'];
+        let vlanOutput = '';
+        if ('tagged_vlan' in interface_info[button.id]) {
+          vlanOutput = 'Tagged Vlans: ' + interface_info[button.id]['tagged_vlan'];
+        } 
+        if ('untagged_vlan' in interface_info[button.id]) {
+          vlanOutput = vlanOutput + '\nUntagged Vlans: ' + interface_info[button.id]['untagged_vlan'];
         };
-      } else {
-        portVlanOutput.innerHTML = '';
+        if (vlanOutput.length > maxLineLength) {
+          vlanOutput = maxOutputLength(vlanOutput);
+        };
+        portVlanOutput.innerHTML = vlanOutput;
       };
       if ('lldp_neighbors' in interface_info[button.id]) {
-        portLldpOutput.innerHTML = interface_info[button.id]['lldp_neighbors']['all_lines']
-      } else {
-        portLldpOutput.innerHTML = ''; 
+        let lldpOutput = interface_info[button.id]['lldp_neighbors']['all_lines']
+        if (lldpOutput.length > maxLineLength) {
+          lldpOutput = maxOutputLength(lldpOutput);
+        };
+        portLldpOutput.innerHTML = lldpOutput;
       };
       portDetailsDropdown.classList.add('show-dropdown');
     };

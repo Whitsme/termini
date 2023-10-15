@@ -62,29 +62,10 @@
             </div>
           </div>
           <div class="config-container">
-            <button class="vlan-button" id="vlan-button" type="button"
-              onclick="toggleDropdown(this)">VLAN</button>
-            <div class="vlan-button-dropdown" id="vlan-button-dropdown">
-              <div class="vlan-output" id="vlan-output"></div>
-            </div>
+            <button class="vlan-button" id="vlan-button" type="button" onclick="toggleDropdown(this)">VLAN</button>
           </div>
           <div class="config-container">
-            <button class="running-config-button" id="running-config" type="button"
-              onclick="toggleDropdown(this)">Configuration</button>
-            <div class="running-config-dropdown" id="running-config-dropdown">
-              <div class="running-config-buttons-container">
-                <div class="edit-button-container">
-                  <button class="edit-button" id="edit-button">Edit</button>
-                </div>
-                <div class="save-button-container">
-                  <button class="save-button" id="save-button">Save</button>
-                </div>
-                <div class="cancel-button-container">
-                  <button class="cancel-button" id="cancel-button">Cancel</button>
-                </div>
-              </div>
-              <div id="config-output"></div>
-            </div>
+            <button class="running-config-button" id="running-config" type="button" onclick="toggleDropdown(this)">Configuration</button>
           </div>
         </div>
       </div>
@@ -95,22 +76,41 @@
           <textarea type="text" id="input"></textarea>
         </div>
       </div>
-    </div>
-    <div class="face-button-dropdown" id="face-button-dropdown"></div>
-    <div class="rear-button-dropdown" id="rear-button-dropdown"></div>
-    <div class="port-details-dropdown" id="port-details-dropdown">
-        <div class="port-details-menu">
-          <span class="port-details-current-port" id="port-details-current-port"></span>
-          <button class="edit-button show-dropdown" id="port-details-button" onclick="toggleDropdown(this), hideOtherDropdowns(this, 'port-details-output')">Details</button>
-          <button class="save-button" id="port-vlan-button" onclick="toggleDropdown(this), hideOtherDropdowns(this,'port-details-output')">VLAN</button>
-          <button class="cancel-button" id="port-lldp-button" onclick="toggleDropdown(this), hideOtherDropdowns(this, 'port-details-output')">LLDP Neighbors</button>
+      <div class="face-button-dropdown" id="face-button-dropdown"></div>
+      <div class="rear-button-dropdown" id="rear-button-dropdown"></div>
+      <div class="port-details-dropdown" id="port-details-dropdown">
+          <div class="port-details-menu">
+            <span class="port-details-current-port" id="port-details-current-port"></span>
+            <button class="edit-button show-dropdown" id="port-details-button" onclick="toggleDropdown(this), hideOtherDropdowns(this, 'port-details-output')">Details</button>
+            <button class="save-button" id="port-vlan-button" onclick="toggleDropdown(this), hideOtherDropdowns(this,'port-details-output')">VLAN</button>
+            <button class="cancel-button" id="port-lldp-button" onclick="toggleDropdown(this), hideOtherDropdowns(this, 'port-details-output')">LLDP Neighbors</button>
+          </div>
+          <div class="port-details-container">
+            <div class="port-details-output show-dropdown" id="port-details-button-dropdown"></div>
+            <div class="port-details-output" id="port-vlan-button-dropdown"></div>
+            <div class="port-details-output" id="port-lldp-button-dropdown"></div>
+          </div>
+      </div>
+      <!-- <div class="ports-container" id="ports-container"></div>
+      <div class="lldp-neighbors-data" id="lldp-neighbors-data" style="color: white;"></div> -->
+      <div class="running-config-dropdown" id="running-config-dropdown">
+        <div class="running-config-buttons-container">
+          <div class="edit-button-container">
+            <button class="edit-button" id="edit-button">Edit</button>
+          </div>
+          <div class="save-button-container">
+            <button class="save-button" id="save-button">Save</button>
+          </div>
+          <div class="cancel-button-container">
+            <button class="cancel-button" id="cancel-button">Cancel</button>
+          </div>
         </div>
-        <div class="port-details-output show-dropdown" id="port-details-button-dropdown"></div>
-        <div class="port-details-output" id="port-vlan-button-dropdown"></div>
-        <div class="port-details-output" id="port-lldp-button-dropdown"></div>
+        <div id="config-output"></div>
+      </div>
+      <div class="vlan-button-dropdown" id="vlan-button-dropdown">
+        <div class="vlan-output" id="vlan-output"></div>
+      </div>
     </div>
-    <div class="ports-container" id="ports-container"></div>
-    <div class="lldp-neighbors-data" id="lldp-neighbors-data" style="color: white;"></div>
   </div>
 </body>
 </html>

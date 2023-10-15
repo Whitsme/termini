@@ -5,6 +5,7 @@ import re
 from modules.ssh import send_ssh_no_pagination
 
 interface_data = []
+details_header = "Port     Name       Status  Config-mode   Speed    Type       Tagged Untagged\n-------- ---------- ------- ------------- -------- ---------- ------ --------\n"
 
 def parse_lines(interface_lines, precursor) -> None:
     for line in interface_lines:
@@ -21,7 +22,7 @@ def parse_lines(interface_lines, precursor) -> None:
                 this_port['port'] = f"1/0/{split_line[0]}"
                 this_port['type'] = "GbE"
                 this_port['status'] = split_line[1]
-                this_port['details'] = clean_line
+                this_port['details'] = f"{details_header}{clean_line}"
 
             except:
                 if len(str(split_line[0])) < 4:
@@ -30,7 +31,7 @@ def parse_lines(interface_lines, precursor) -> None:
                     this_port['port'] = f"1/1/{split_line[0]}"
                     this_port['type'] = "10 GbE"
                     this_port['status'] = split_line[1]
-                    this_port['details'] = clean_line
+                    this_port['details'] = f"{details_header}{clean_line}"
 
             if len(this_port) > 0:
                 interface_data.append(this_port)

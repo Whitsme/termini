@@ -5,7 +5,7 @@ import json
 import paramiko
 from flask import Flask, request, render_template, jsonify
 
-from modules.aruba.show_commands import show_int_status, show_modules, show_system
+from modules.aruba.show_commands import aruba_show_running_config, show_int_status, show_lldp_info, show_modules, show_system
 from modules.ssh import send_ssh_command
 from modules.show_commands import (show_interface, show_lldp_neighbors, show_running_config, show_version)
 
@@ -163,12 +163,13 @@ def known_hosts():
 
 @app.route('/show_configuration', methods=['POST'])
 def show_configuration():
-    running_config = show_running_config(ssh_channel, precursor[0], no_pagination_cmd)
+    if "Aruba" not in precursor[0]:
+        running_config = show_running_config(ssh_channel, precursor[0], no_pagination_cmd)
+    else: 
+        running_config = aruba_show_running_config(ssh_channel, precursor[0], no_pagination_cmd)
     if running_config:
-        print(running_config['untagged_vlan'])
-        print(running_config['tagged_vlan'])
         return jsonify({
-            'running_config': running_config['running_config'],
+            'running_config': str(running_config['running_config']),
             'tagged_vlan': running_config['tagged_vlan'],
             'untagged_vlan': running_config['untagged_vlan']
             })
@@ -192,7 +193,10 @@ def send_show_interfaces():
 
 @app.route('/show_lldp_neighbors', methods=['POST'])
 def send_show_lldp_neighbors():
-    lldp_neighbors = show_lldp_neighbors(ssh_channel, precursor[0], no_pagination_cmd)
+    if "Aruba" not in precursor[0]:
+        lldp_neighbors = show_lldp_neighbors(ssh_channel, precursor[0], no_pagination_cmd)
+    else:
+        lldp_neighbors = show_lldp_info(ssh_channel, precursor[0], no_pagination_cmd)
     if lldp_neighbors:
         return jsonify({
             'lldp_neighbors': lldp_neighbors

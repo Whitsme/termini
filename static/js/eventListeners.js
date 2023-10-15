@@ -53,6 +53,15 @@ connectButton.addEventListener('click', async () => {
     connectButton.style.display = 'none';
 });
 
+faceButton.addEventListener('click', () => {
+  hideOtherDropdowns(faceButton, 'port-details-dropdown');
+});
+
+rearButton.addEventListener('click', () => {
+  hideOtherDropdowns(rearButton, 'port-details-dropdown');
+});
+
+
 // terminal event listener
 inputField.addEventListener("keydown", async (event) => {
     if (event.key === "Enter") {

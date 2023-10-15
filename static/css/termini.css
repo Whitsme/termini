@@ -3,7 +3,10 @@ body {
 }
 
 #main-container {
-  display: block;
+  display: flex;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center;
 }
 
 .terminal-button {
@@ -43,10 +46,7 @@ body {
 }
 
 #terminal-container {
-  display: flex;
-  flex-direction: column; 
-  justify-content: center; 
-  align-items: center;
+  min-width: 1087px;
 }
 
 #terminal {
@@ -216,13 +216,10 @@ body {
 
 .vlan-button-dropdown {
   display: none;
-  position: absolute;
   background-color: #fff;
   border: 0.3rem solid silver;
   padding: 0;
   margin: 0;
-  margin-left: 1rem;
-  margin-top: 0.1rem;
 }
 
 .vlan-output {
@@ -250,13 +247,10 @@ body {
 
 .running-config-dropdown {
   display: none;
-  position: absolute;
   background-color: #fff;
   border: 0.3rem solid silver;
   padding: 0;
   margin: 0;
-  margin-left: -62.6rem;
-  margin-top: 0.3rem;
 }
 
 #config-output::-webkit-scrollbar {
@@ -287,7 +281,6 @@ body {
   padding-left: 0.5rem;
   background-color: silver;
   border: solid 0.32rem silver;
-  min-width: 1087px;
   display: flex;
 }
 
@@ -1051,9 +1044,25 @@ body {
 .port-details-menu {
   display: flex;
   background-color: silver;
-  border: solid 0.32rem silver;
   border-top: none;
   min-width: 1095px;
+  width: 100%;
+}
+
+.port-details-current-port {
+  margin: 0.01rem;
+  margin-left: 1rem;
+  margin-right: 0.2rem;
+  color: darkslategray;
+  border: solid 0.1rem transparent;
+  border-radius: 0.2rem;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: Arial;
+}
+
+.port-details-container {
+  width: 100%;
 }
 
 .port-details-output {
